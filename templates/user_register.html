@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f2f5fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .register-container {
+            width: 90%;
+            max-width: 400px;
+            padding: 35px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #243b55;
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin: 12px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 12px;
+            background: #243b55;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #141e30;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            color: #243b55;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="register-container">
+
+        <h1>User Registration</h1>
+        <p>Student Management System</p>
+
+        <form id="registerForm">
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your student email"
+                required
+            >
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Create password (minimum 8 characters)"
+                minlength="8"
+                required
+            >
+
+            <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm password"
+                minlength="8"
+                required
+            >
+
+            <button type="submit" id="registerButton">
+                Register
+            </button>
+
+        </form>
+
+        <div class="message" id="message"></div>
+
+        <div class="login-link">
+            Already registered?
+            <a href="/user/login-page">Login here</a>
+        </div>
+
+    </div>
+
+    <script>
+        const form = document.getElementById("registerForm");
+        const message = document.getElementById("message");
+        const button = document.getElementById("registerButton");
+
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const confirmPassword =
+                document.getElementById("confirmPassword").value;
+
+            if (password !== confirmPassword) {
+                message.style.color = "red";
+                message.textContent = "Passwords do not match!";
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = "Registering...";
+            message.textContent = "";
+
+            try {
+                const response = await fetch("/user/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || "Registration failed");
+                }
+
+                message.style.color = "green";
+                message.textContent =
+                    "Registration successful! Redirecting to login...";
+
+                setTimeout(() => {
+                    window.location.href = "/user/login-page";
+                }, 1500);
+
+            } catch (error) {
+                message.style.color = "red";
+                message.textContent = error.message;
+            } finally {
+                button.disabled = false;
+                button.textContent = "Register";
+            }
+        });
+    </script>
+
+</body>
+</html>

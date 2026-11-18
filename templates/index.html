@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+
+        <button type="button" id="logoutButton" style="float: right;">
+            Logout
+        </button>
+
+        <h1>Student Management System</h1>
+        <p>Manage your student records</p>
+
+        <h2>Add Student</h2>
+
+        <form id="studentForm">
+
+            <input type="text" id="roll_no" placeholder="Roll Number" required>
+            <input type="text" id="name" placeholder="Student Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+
+            <input
+                type="tel"
+                id="mobile"
+                placeholder="Mobile Number"
+                pattern="[0-9]{10}"
+                minlength="10"
+                maxlength="10"
+                title="Enter a valid 10-digit mobile number"
+                required
+            >
+
+            <input type="text" id="department" placeholder="Department" required>
+            <input type="number" id="year" placeholder="Year" min="1" max="5" required>
+
+            <button type="submit">Add Student</button>
+
+        </form>
+
+        <!-- SINGLE GET SEARCH -->
+
+        <h2>Search Student</h2>
+
+        <div class="search-section">
+
+            <input
+                type="number"
+                id="searchStudentId"
+                placeholder="Enter Student ID"
+                min="1"
+            >
+
+            <button type="button" id="searchButton">Search</button>
+
+            <button type="button" id="showAllButton">
+                Show All Students
+            </button>
+
+        </div>
+
+        <div id="singleStudentResult"></div>
+
+        <!-- STUDENT TABLE -->
+
+        <h2>Student Details</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Roll No</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Department</th>
+                    <th>Year</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="studentTable"></tbody>
+
+        </table>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}?v=5"></script>
+
+</body>
+</html>

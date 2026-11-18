@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>User Login</title>
+
+    <style>
+        /* GLOBAL */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f3f8;
+            color: #17243b;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        /* LOGIN CONTAINER */
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        /* HEADING */
+        h1 {
+            text-align: center;
+            color: #17243b;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            text-align: center;
+            color: #65718a;
+            margin-bottom: 28px;
+            font-size: 16px;
+        }
+
+        /* LOGIN FORM */
+        #userLoginForm {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* INPUT FIELDS */
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #cbd2df;
+            border-radius: 7px;
+            font-size: 15px;
+            outline: none;
+            background: #ffffff;
+            color: #17243b;
+        }
+
+        input:focus {
+            border-color: #263b64;
+            box-shadow: 0 0 5px rgba(38, 59, 100, 0.2);
+        }
+
+        /* LOGIN BUTTON */
+        #loginButton {
+            width: 100%;
+            padding: 12px;
+            background: #17243b;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        #loginButton:hover {
+            background: #304a78;
+        }
+
+        #loginButton:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* ERROR MESSAGE */
+        .message {
+            color: #DC3545;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* REGISTER LINK */
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #65718a;
+        }
+
+        .register-link a {
+            color: #17243b;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .login-container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <h1>User Login</h1>
+
+        <p>Student Management System</p>
+
+        <form id="userLoginForm">
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your registered email"
+                required
+            >
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                required
+            >
+
+            <button type="submit" id="loginButton">
+                Login
+            </button>
+
+        </form>
+
+        <div class="message" id="message"></div>
+
+        <div class="register-link">
+            Don't have an account?
+            <a href="/user/register-page">Register here</a>
+        </div>
+
+    </div>
+
+    <script>
+        const form = document.getElementById("userLoginForm");
+        const message = document.getElementById("message");
+        const button = document.getElementById("loginButton");
+
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+            button.disabled = true;
+            button.textContent = "Logging in...";
+            message.textContent = "";
+
+            try {
+                const response = await fetch("/user/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || "Login failed");
+                }
+
+                localStorage.setItem("userToken", data.token);
+                localStorage.setItem("userEmail", data.email);
+
+                window.location.href = "/user/dashboard";
+
+            } catch (error) {
+                message.textContent = error.message;
+            } finally {
+                button.disabled = false;
+                button.textContent = "Login";
+            }
+        });
+    </script>
+
+</body>
+</html>

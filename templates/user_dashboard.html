@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f4f8;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            text-align: center;
+            color: #222;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input:disabled {
+            background: #eee;
+            color: #555;
+        }
+
+        button {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            font-size: 14px;
+            margin: 5px 4px 0 0;
+        }
+
+        .edit {
+    background: #64748B;
+    color: white;
+    padding: 7px 11px;
+    margin: 2px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: normal;
+    transition: background 0.3s ease;
+}
+
+.edit:hover {
+    background: #E57373;
+    color: white;
+}
+
+        .save {
+            background: #16a34a;
+        }
+
+        .cancel {
+            background: #64748b;
+        }
+
+        /* LOGOUT BUTTON - SAME AS ADMIN */
+        .logout {
+            background: #64748B;
+            color: white;
+            padding: 7px 11px;
+            margin: 2px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: normal;
+            transition: background 0.3s ease;
+            float: right;
+        }
+
+        /* LOGOUT HOVER - SAME AS ADMIN */
+        .logout:hover {
+            background: #E57373;
+            color: white;
+        }
+
+        #message {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <button class="logout" onclick="logout()">Logout</button>
+
+    <h2>My Student Dashboard</h2>
+
+    <div class="field">
+        <label>Student ID</label>
+        <input type="text" id="studentId" disabled>
+    </div>
+
+    <div class="field">
+        <label>Roll Number</label>
+        <input type="text" id="rollNo" disabled>
+    </div>
+
+    <div class="field">
+        <label>Name</label>
+        <input type="text" id="name" disabled>
+    </div>
+
+    <div class="field">
+        <label>Email</label>
+        <input type="email" id="email" disabled>
+    </div>
+
+    <div class="field">
+        <label>Mobile</label>
+        <input type="text" id="mobile" disabled>
+    </div>
+
+    <div class="field">
+        <label>Department</label>
+        <input type="text" id="department" disabled>
+    </div>
+
+    <div class="field">
+        <label>Year</label>
+        <input type="text" id="year" disabled>
+    </div>
+
+    <div class="actions">
+        <button class="edit" id="editBtn" onclick="editName()">Edit Name</button>
+        <button class="save" id="saveBtn" onclick="saveName()" hidden>Save</button>
+        <button class="cancel" id="cancelBtn" onclick="cancelEdit()" hidden>Cancel</button>
+    </div>
+
+    <p id="message"></p>
+
+</div>
+
+<script>
+    const token = localStorage.getItem("userToken");
+
+    if (!token) {
+        window.location.href = "/user/login-page";
+    }
+
+    let originalName = "";
+
+    async function loadProfile() {
+        try {
+            const response = await fetch("/user/me", {
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            if (response.status === 401) {
+                localStorage.removeItem("userToken");
+                localStorage.removeItem("userEmail");
+                window.location.href = "/user/login-page";
+                return;
+            }
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || data.error || "Unable to load profile");
+            }
+
+            document.getElementById("studentId").value = data.id ?? "";
+            document.getElementById("rollNo").value = data.roll_no ?? "";
+            document.getElementById("name").value = data.name ?? "";
+            document.getElementById("email").value = data.email ?? "";
+            document.getElementById("mobile").value = data.mobile ?? "";
+            document.getElementById("department").value = data.department ?? "";
+            document.getElementById("year").value = data.year ?? "";
+
+            originalName = data.name ?? "";
+
+        } catch (error) {
+            document.getElementById("message").textContent = error.message;
+        }
+    }
+
+    function editName() {
+        document.getElementById("name").disabled = false;
+
+        document.getElementById("editBtn").hidden = true;
+        document.getElementById("saveBtn").hidden = false;
+        document.getElementById("cancelBtn").hidden = false;
+
+        document.getElementById("name").focus();
+    }
+
+    async function saveName() {
+        const name = document.getElementById("name").value.trim();
+        const message = document.getElementById("message");
+
+        if (!name) {
+            message.textContent = "Name cannot be empty";
+            return;
+        }
+
+        try {
+            const response = await fetch("/user/me", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+                body: JSON.stringify({ name: name })
+            });
+
+            const data = await response.json();
+
+            if (response.status === 401) {
+                localStorage.removeItem("userToken");
+                localStorage.removeItem("userEmail");
+                window.location.href = "/user/login-page";
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error(data.message || data.error || "Unable to update name");
+            }
+
+            originalName = name;
+            message.textContent = "Name updated successfully!";
+            finishEdit();
+
+        } catch (error) {
+            message.textContent = error.message;
+        }
+    }
+
+    function cancelEdit() {
+        document.getElementById("name").value = originalName;
+        document.getElementById("message").textContent = "";
+        finishEdit();
+    }
+
+    function finishEdit() {
+        document.getElementById("name").disabled = true;
+
+        document.getElementById("editBtn").hidden = false;
+        document.getElementById("saveBtn").hidden = true;
+        document.getElementById("cancelBtn").hidden = true;
+    }
+
+    async function logout() {
+
+        const confirmLogout = confirm("Are you sure you want to logout?");
+
+        if (!confirmLogout) {
+            return;
+        }
+
+        try {
+            await fetch("/user/logout", {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+        } catch (error) {
+            console.log("Logout request failed");
+        }
+
+        localStorage.removeItem("userToken");
+        localStorage.removeItem("userEmail");
+
+        window.location.href = "/user/login-page";
+    }
+
+    loadProfile();
+</script>
+
+</body>
+</html>
