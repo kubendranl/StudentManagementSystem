@@ -1168,10 +1168,15 @@ def create_user_table():
         cur.close()
         conn.close()
 
+# ---------------- DATABASE INITIALIZATION ----------------
+
+create_table()
+create_user_table()
+
+print("Database initialization completed!")
+
 
 # ---------------- RUN APPLICATION ----------------
 
 if __name__ == "__main__":
-    create_table()
-    create_user_table()
     app.run(debug=True)

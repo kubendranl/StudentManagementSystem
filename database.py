@@ -86,14 +86,12 @@ def create_table():
         print("JWT session management ready!")
 
     except Exception as e:
-
-        conn.rollback()
-
-        print("Table setup failed:", e)
-
+    conn.rollback()
+    print("Table setup failed:", e)
+    raise
     finally:
 
-        if cur is not None:
-            cur.close()
+       if conn is None:
+    raise RuntimeError("Database connection failed during table creation")
 
         conn.close()
