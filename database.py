@@ -73,7 +73,7 @@ def create_table():
             )
         """)
 
-        # ADD TOKEN VERSION IF NOT EXISTS
+               # ADD TOKEN VERSION IF NOT EXISTS
         cur.execute("""
             ALTER TABLE admins
             ADD COLUMN IF NOT EXISTS token_version INTEGER NOT NULL DEFAULT 0
@@ -86,12 +86,12 @@ def create_table():
         print("JWT session management ready!")
 
     except Exception as e:
-    conn.rollback()
-    print("Table setup failed:", e)
-    raise
-    finally:
+        conn.rollback()
+        print("Table setup failed:", e)
+        raise
 
-       if conn is None:
-    raise RuntimeError("Database connection failed during table creation")
+    finally:
+        if cur is not None:
+            cur.close()
 
         conn.close()
