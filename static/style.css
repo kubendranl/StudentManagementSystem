@@ -602,3 +602,11 @@ body:not(.spa-center) { display:block; align-items:initial; justify-content:init
 #adminDashboardScreen #adminLogoutButton:hover {
     background: #304a78 !important;
 }
+#saveNameButton {
+    margin-right: 8px;
+}
+
+#saveNameButton,
+#cancelNameButton {
+    display: inline-block;
+}

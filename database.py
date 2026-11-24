@@ -17,7 +17,6 @@ def connect_db():
             password=os.getenv("DB_PASSWORD"),
             port=os.getenv("DB_PORT", "5432")
         )
-
         return conn
 
     except Exception as e:
@@ -51,13 +50,11 @@ def create_table():
             )
         """)
 
-        # ADD MOBILE COLUMN IF NOT EXISTS
         cur.execute("""
             ALTER TABLE students
             ADD COLUMN IF NOT EXISTS mobile VARCHAR(15)
         """)
 
-        # UNIQUE MOBILE INDEX
         cur.execute("""
             CREATE UNIQUE INDEX IF NOT EXISTS idx_students_mobile
             ON students(mobile)
@@ -73,16 +70,28 @@ def create_table():
             )
         """)
 
-               # ADD TOKEN VERSION IF NOT EXISTS
         cur.execute("""
             ALTER TABLE admins
             ADD COLUMN IF NOT EXISTS token_version INTEGER NOT NULL DEFAULT 0
+        """)
+
+        # USERS TABLE
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(100) NOT NULL,
+                email VARCHAR(100) UNIQUE NOT NULL,
+                password VARCHAR(255) NOT NULL,
+                token_version INTEGER NOT NULL DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
         """)
 
         conn.commit()
 
         print("Students table ready!")
         print("Admins table ready!")
+        print("Users table ready!")
         print("JWT session management ready!")
 
     except Exception as e:

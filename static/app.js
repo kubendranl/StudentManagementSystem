@@ -6,8 +6,37 @@ function showScreen(id) {
   if (id === "adminDashboardScreen") loadStudents();
   if (id === "userDashboardScreen") loadUserProfile();
 }
-document.getElementById("chooseAdmin").addEventListener("click", () => showScreen("adminLoginScreen"));
-document.getElementById("chooseUser").addEventListener("click", () => showScreen("userLoginScreen"));
+// API-based Admin / User selection
+async function selectRole(role) {
+    try {
+        const response = await fetch("/api/select-role", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ role: role })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.error || "Unable to select role");
+        }
+
+        showScreen(data.screen);
+
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+document.getElementById("chooseAdmin").addEventListener("click", () => {
+    selectRole("admin");
+});
+
+document.getElementById("chooseUser").addEventListener("click", () => {
+    selectRole("user");
+});
 document.querySelectorAll("[data-screen]").forEach(btn => btn.addEventListener("click", () => showScreen(btn.dataset.screen)));
 document.getElementById("goRegister").addEventListener("click", () => showScreen("userRegisterScreen"));
 document.getElementById("backToUserLogin").addEventListener("click", () => showScreen("userLoginScreen"));
@@ -106,7 +135,8 @@ document.getElementById("saveNameButton").addEventListener("click",async()=>{
 });
 document.getElementById("userLogoutButton").addEventListener("click",async()=>{if(!confirm("Are you sure you want to logout?"))return;const token=getUserToken();try{if(token)await fetch("/user/logout",{method:"POST",headers:{Authorization:"Bearer "+token}});}catch(error){console.error(error);}finally{localStorage.removeItem("userToken");localStorage.removeItem("userEmail");showScreen("roleScreen");}});
 
-// Restore the correct screen when refreshing an authenticated session.
-if(getAdminToken()) showScreen("adminDashboardScreen");
-else if(getUserToken()) showScreen("userDashboardScreen");
-else showScreen("roleScreen");
+sessionStorage.removeItem("studentToken");
+localStorage.removeItem("userToken");
+localStorage.removeItem("userEmail");
+
+showScreen("roleScreen");
