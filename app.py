@@ -278,8 +278,9 @@ def user_required(func):
 
 @app.route("/")
 def home():
-    # Show the Admin / User login selection page first.
-    return render_template("role_selection.html")
+    # Serve the single-page frontend. Screen changes happen in JavaScript;
+    # authentication and data operations continue through the existing APIs.
+    return render_template("app.html")
 
 
 # ---------------- ADMIN LOGIN PAGE ----------------
@@ -1168,15 +1169,10 @@ def create_user_table():
         cur.close()
         conn.close()
 
-# ---------------- DATABASE INITIALIZATION ----------------
-
-create_table()
-create_user_table()
-
-print("Database initialization completed!")
-
 
 # ---------------- RUN APPLICATION ----------------
 
 if __name__ == "__main__":
+    create_table()
+    create_user_table()
     app.run(debug=True)

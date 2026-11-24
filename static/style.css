@@ -250,3 +250,355 @@ th:nth-child(8), td:nth-child(8) {
         min-width: 850px;
     }
 }
+
+/* SPA screen handling and user screens */
+[hidden] { display: none !important; }
+body.spa-center { min-height:100vh; display:flex; justify-content:center; align-items:center; padding:30px; background:#f1f3f8; }
+.role-container,.user-login-container,.register-container,.user-dashboard-container { width:100%; max-width:600px; background:#fff; padding:35px; border-radius:15px; box-shadow:0 4px 18px rgba(0,0,0,.08); }
+.role-container { max-width:450px; text-align:center; }
+.role-container h1,.user-login-container h1,.register-container h1 { color:#17243b; text-align:center; margin-bottom:14px; }
+.role-container p,.user-login-container p,.register-container p { text-align:center; color:#65718a; margin:12px 0 25px; }
+.role-option { display:block; width:100%; padding:15px; margin:14px 0; color:white; background:#243b55; border:0; border-radius:7px; cursor:pointer; font-size:16px; }
+.role-option:hover { background:#526d96; }
+.user-login-container,.register-container { max-width:420px; }
+.user-login-container form,.register-container form { display:flex; flex-direction:column; gap:14px; }
+.user-login-container input,.register-container input,.user-dashboard-container input { width:100%; padding:13px; border:1px solid #cbd2df; border-radius:7px; font-size:15px; }
+.user-login-container button,.register-container button,.user-dashboard-container button { padding:11px 16px; border:0; border-radius:6px; cursor:pointer; color:#fff; background:#243b55; }
+.user-login-container button:disabled,.register-container button:disabled { opacity:.65; cursor:not-allowed; }
+.spa-link { color:#243b55; font-weight:bold; cursor:pointer; text-decoration:underline; background:none!important; border:0; padding:0!important; }
+.spa-message { text-align:center; margin-top:14px; min-height:20px; }
+.user-dashboard-container { max-width:600px; margin:30px auto; }
+.user-dashboard-container .field { margin:16px 0; }
+.user-dashboard-container label { display:block; margin-bottom:7px; font-weight:bold; }
+.user-dashboard-container input:disabled { background:#eee; color:#555; }
+.user-actions { text-align:center; margin-top:20px; }
+.user-logout { float:right; background:#64748b!important; }
+.user-edit { background:#64748b!important; }
+.user-save { background:#16a34a!important; }
+.user-cancel { background:#64748b!important; }
+@media(max-width:768px){ body.spa-center{padding:15px}.role-container,.user-login-container,.register-container,.user-dashboard-container{padding:24px}.user-dashboard-container{margin:10px auto} }
+
+/* Override legacy login.css body flex layout on dashboard screen */
+body:not(.spa-center) { display:block; align-items:initial; justify-content:initial; padding:30px; background:#f1f3f8; color:#17243b; }
+#adminLoginForm { display:flex; flex-direction:column; gap:15px; }
+#adminLoginForm input { width:100%; padding:14px; border:1px solid #cbd2df; border-radius:7px; font-size:15px; }
+#adminLoginButton { width:100%; padding:12px; background:#17243b; color:#fff; border:0; border-radius:7px; cursor:pointer; }
+#adminLoginButton:hover { background:#304a78; }
+
+
+/* =====================================================
+   FINAL THEME: ADMIN AND USER USE THE SAME NAVY DESIGN
+   Register here / Back / Login here remain normal text links
+===================================================== */
+
+/* Common card design for Admin Login, User Login and Register */
+#adminLoginScreen,
+.user-login-container,
+.register-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 35px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    color: #17243b;
+}
+
+#adminLoginScreen h1,
+.user-login-container h1,
+.register-container h1 {
+    color: #17243b;
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+#adminLoginScreen p,
+.user-login-container p,
+.register-container p {
+    color: #65718a;
+    text-align: center;
+    font-size: 16px;
+    margin: 12px 0 25px;
+}
+
+/* Consistent input design */
+#adminLoginScreen input,
+.user-login-container input,
+.register-container input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #cbd2df;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #17243b;
+    font-size: 15px;
+    outline: none;
+}
+
+#adminLoginScreen input:focus,
+.user-login-container input:focus,
+.register-container input:focus {
+    border-color: #263b64;
+    box-shadow: 0 0 5px rgba(38, 59, 100, 0.2);
+}
+
+/* Main Login and Register buttons */
+#adminLoginButton,
+#userLoginButton,
+#registerButton {
+    width: 100%;
+    padding: 12px;
+    background: #17243b !important;
+    color: #ffffff !important;
+    border: none;
+    border-radius: 7px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#adminLoginButton:hover,
+#userLoginButton:hover,
+#registerButton:hover {
+    background: #304a78 !important;
+}
+
+#adminLoginButton:disabled,
+#userLoginButton:disabled,
+#registerButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Register here / Back / Login here: normal text links, NOT buttons */
+.spa-link,
+.user-login-container .spa-link,
+.register-container .spa-link {
+    display: inline;
+    width: auto;
+    margin: 0;
+    padding: 0 !important;
+    background: transparent !important;
+    color: #17243b !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    font-size: inherit;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.spa-link:hover,
+.user-login-container .spa-link:hover,
+.register-container .spa-link:hover {
+    background: transparent !important;
+    color: #304a78 !important;
+}
+
+/* User and Admin dashboard Logout buttons: same navy style */
+#adminLogoutButton,
+#userLogoutButton,
+.user-dashboard-container .user-logout {
+    float: right;
+    margin: 2px;
+    padding: 7px 11px;
+    background: #17243b !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: normal;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#adminLogoutButton:hover,
+#userLogoutButton:hover,
+.user-dashboard-container .user-logout:hover {
+    background: #304a78 !important;
+    color: #ffffff !important;
+}
+
+/* User dashboard action buttons use the same navy colour */
+.user-dashboard-container .user-edit,
+.user-dashboard-container .user-save,
+.user-dashboard-container .user-cancel {
+    background: #17243b !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 5px;
+    padding: 7px 11px;
+    cursor: pointer;
+}
+
+.user-dashboard-container .user-edit:hover,
+.user-dashboard-container .user-save:hover,
+.user-dashboard-container .user-cancel:hover {
+    background: #304a78 !important;
+}
+
+@media (max-width: 768px) {
+    #adminLoginScreen,
+    .user-login-container,
+    .register-container {
+        padding: 25px;
+    }
+
+    #adminLoginScreen h1,
+    .user-login-container h1,
+    .register-container h1 {
+        font-size: 27px;
+    }
+}
+
+/* =====================================================
+   FINAL FIX - USER LOGIN, REGISTRATION AND DASHBOARD
+   Keep Login/Register buttons navy; links stay plain text.
+===================================================== */
+
+/* User Login: only the main Login button is a filled button */
+#userLoginScreen #userLoginButton {
+    display: block !important;
+    width: 100% !important;
+    padding: 12px !important;
+    margin: 0 !important;
+    background: #17243b !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    border-radius: 7px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+}
+
+#userLoginScreen #userLoginButton:hover {
+    background: #304a78 !important;
+}
+
+/* Register here: plain text link, no button box */
+#userLoginScreen #goRegister {
+    display: inline !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    color: #17243b !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    font-size: inherit !important;
+    font-weight: bold !important;
+    text-decoration: underline !important;
+    cursor: pointer !important;
+}
+
+#userLoginScreen #goRegister:hover {
+    background: transparent !important;
+    color: #304a78 !important;
+}
+
+/* Back: plain text link aligned to the left */
+#userLoginScreen > button[data-screen="roleScreen"] {
+    display: block !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 12px 0 0 0 !important;
+    background: transparent !important;
+    color: #17243b !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    font-size: 15px !important;
+    font-weight: bold !important;
+    text-decoration: underline !important;
+    cursor: pointer !important;
+}
+
+#userLoginScreen > button[data-screen="roleScreen"]:hover {
+    background: transparent !important;
+    color: #304a78 !important;
+}
+
+/* Registration: navy Register button like Admin Login */
+#userRegisterScreen #registerButton {
+    display: block !important;
+    width: 100% !important;
+    padding: 12px !important;
+    margin: 0 !important;
+    background: #17243b !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    border-radius: 7px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+}
+
+#userRegisterScreen #registerButton:hover {
+    background: #304a78 !important;
+}
+
+/* Login here: plain text link, no button box */
+#userRegisterScreen #backToUserLogin {
+    display: inline !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    color: #17243b !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    font-size: inherit !important;
+    font-weight: bold !important;
+    text-decoration: underline !important;
+    cursor: pointer !important;
+}
+
+#userRegisterScreen #backToUserLogin:hover {
+    background: transparent !important;
+    color: #304a78 !important;
+}
+
+/* User Dashboard Logout: same navy colour, size and shape as Admin Logout */
+#userDashboardScreen #userLogoutButton {
+    float: right !important;
+    display: inline-block !important;
+    width: auto !important;
+    padding: 7px 11px !important;
+    margin: 2px !important;
+    background: #17243b !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    border-radius: 5px !important;
+    font-size: 13px !important;
+    font-weight: normal !important;
+    cursor: pointer !important;
+    transition: background 0.3s ease !important;
+}
+
+#userDashboardScreen #userLogoutButton:hover {
+    background: #304a78 !important;
+    color: #ffffff !important;
+}
+
+/* Admin Logout: match the same navy button appearance */
+#adminDashboardScreen #adminLogoutButton {
+    float: right !important;
+    display: inline-block !important;
+    width: auto !important;
+    padding: 7px 11px !important;
+    margin: 2px !important;
+    background: #17243b !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    border-radius: 5px !important;
+    font-size: 13px !important;
+    font-weight: normal !important;
+    cursor: pointer !important;
+}
+
+#adminDashboardScreen #adminLogoutButton:hover {
+    background: #304a78 !important;
+}

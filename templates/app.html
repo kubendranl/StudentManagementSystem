@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Management System</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body class="spa-center">
+<!-- ROLE SELECTION -->
+<section id="roleScreen" class="role-container">
+  <h1>Student Management System</h1><p>Choose your login type</p>
+  <button class="role-option" id="chooseAdmin">Admin Login<span style="display:block;font-size:12px;font-weight:normal;margin-top:6px">Login as Administrator</span></button>
+  <button class="role-option" id="chooseUser">User Login<span style="display:block;font-size:12px;font-weight:normal;margin-top:6px">Login as Student</span></button>
+</section>
+<!-- ADMIN LOGIN -->
+<section id="adminLoginScreen" class="login-container" hidden>
+  <h1>Admin Login</h1><p>Student Management System</p>
+  <form id="adminLoginForm">
+    <input type="email" id="adminEmail" placeholder="Enter Admin Email" required>
+    <input type="password" id="adminPassword" placeholder="Enter Password" required>
+    <button type="submit" id="adminLoginButton">Login</button>
+  </form><p class="spa-message" id="adminLoginMessage"></p>
+  <button type="button" class="spa-link" data-screen="roleScreen">Back</button>
+</section>
+<!-- USER LOGIN -->
+<section id="userLoginScreen" class="user-login-container" hidden>
+  <h1>User Login</h1><p>Student Management System</p>
+  <form id="userLoginForm">
+    <input type="email" id="userLoginEmail" placeholder="Enter your registered email" required>
+    <input type="password" id="userLoginPassword" placeholder="Enter your password" required>
+    <button type="submit" id="userLoginButton">Login</button>
+  </form>
+  <div id="userLoginMessage" class="spa-message"></div>
+  <p>Don't have an account? <button type="button" class="spa-link" id="goRegister">Register here</button></p>
+  <button type="button" class="spa-link" data-screen="roleScreen">Back</button>
+</section>
+<!-- USER REGISTRATION -->
+<section id="userRegisterScreen" class="register-container" hidden>
+  <h1>User Registration</h1><p>Student Management System</p>
+  <form id="userRegisterForm">
+    <input type="email" id="registerEmail" placeholder="Enter your student email" required>
+    <input type="password" id="registerPassword" placeholder="Create password (minimum 8 characters)" minlength="8" required>
+    <input type="password" id="confirmPassword" placeholder="Confirm password" minlength="8" required>
+    <button type="submit" id="registerButton">Register</button>
+  </form>
+  <div id="registerMessage" class="spa-message"></div>
+  <p>Already registered? <button type="button" class="spa-link" id="backToUserLogin">Login here</button></p>
+</section>
+<!-- ADMIN DASHBOARD -->
+<section id="adminDashboardScreen" class="container" hidden>
+  <button type="button" id="adminLogoutButton" style="float:right">Logout</button>
+  <h1>Student Management System</h1><p>Manage your student records</p>
+  <h2>Add Student</h2>
+  <form id="studentForm">
+    <input type="text" id="roll_no" placeholder="Roll Number" required>
+    <input type="text" id="name" placeholder="Student Name" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="tel" id="mobile" placeholder="Mobile Number" pattern="[0-9]{10}" minlength="10" maxlength="10" title="Enter a valid 10-digit mobile number" required>
+    <input type="text" id="department" placeholder="Department" required>
+    <input type="number" id="year" placeholder="Year" min="1" max="5" required>
+    <button type="submit">Add Student</button>
+  </form>
+  <h2>Search Student</h2>
+  <div class="search-section"><input type="number" id="searchStudentId" placeholder="Enter Student ID" min="1"><button type="button" id="searchButton">Search</button><button type="button" id="showAllButton">Show All Students</button></div>
+  <div id="singleStudentResult"></div>
+  <h2>Student Details</h2>
+  <table><thead><tr><th>ID</th><th>Roll No</th><th>Name</th><th>Email</th><th>Mobile</th><th>Department</th><th>Year</th><th>Action</th></tr></thead><tbody id="studentTable"></tbody></table>
+</section>
+<!-- USER DASHBOARD -->
+<section id="userDashboardScreen" class="user-dashboard-container" hidden>
+  <button class="user-logout" type="button" id="userLogoutButton">Logout</button>
+  <h2>My Student Dashboard</h2>
+  <div class="field"><label>Student ID</label><input id="profileStudentId" disabled></div>
+  <div class="field"><label>Roll Number</label><input id="profileRollNo" disabled></div>
+  <div class="field"><label>Name</label><input id="profileName" disabled></div>
+  <div class="field"><label>Email</label><input id="profileEmail" disabled></div>
+  <div class="field"><label>Mobile</label><input id="profileMobile" disabled></div>
+  <div class="field"><label>Department</label><input id="profileDepartment" disabled></div>
+  <div class="field"><label>Year</label><input id="profileYear" disabled></div>
+  <div class="user-actions"><button class="user-edit" id="editNameButton" type="button">Edit Name</button><button class="user-save" id="saveNameButton" type="button" hidden>Save</button><button class="user-cancel" id="cancelNameButton" type="button" hidden>Cancel</button></div>
+  <p id="profileMessage" class="spa-message"></p>
+</section>
+<script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</body></html>
